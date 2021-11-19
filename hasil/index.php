@@ -1,6 +1,7 @@
-<?php 
+<?php
 
 include('../connection.php');
+session_start();
 
 $query = "SELECT * FROM jadwal WHERE selesai = 1";
 $mapel = mysqli_query($connection, $query);
@@ -66,20 +67,24 @@ $i = 1;
               <th>Mata Pelajaran</th>
               <th>Hari, Tanggal</th>
               <th>Status</th>
-              <th>Action</th>
+              <?php if ($_SESSION['role'] == 'admin') : ?>
+                <th>Action</th>
+              <?php endif ?>
             </tr>
           </thead>
           <tbody>
-            <?php foreach($mapel as $m) : ?>
-            <tr>
-              <td><?= $i++ ?></td>
-              <td><?= $m['mapel'] ?></td>
-              <td><?= $m['waktu'] ?></td>
-              <td><?= $m['selesai'] ? 'Selesai' : 'Belum' ?></td>
-              <td>
-                <a href="../hasil/hapus.php?id=<?= $m['id'] ?>" class="btn btn-danger btn-sm">Hapus</a>
-              </td>
-            </tr>
+            <?php foreach ($mapel as $m) : ?>
+              <tr>
+                <td><?= $i++ ?></td>
+                <td><?= $m['mapel'] ?></td>
+                <td><?= $m['waktu'] ?></td>
+                <td><?= $m['selesai'] ? 'Selesai' : 'Belum' ?></td>
+                <?php if ($_SESSION['role'] == 'admin') : ?>
+                  <td>
+                    <a href="../hasil/hapus.php?id=<?= $m['id'] ?>" class="btn btn-danger btn-sm">Hapus</a>
+                  </td>
+                <?php endif ?>
+              </tr>
             <?php endforeach ?>
           </tbody>
         </table>

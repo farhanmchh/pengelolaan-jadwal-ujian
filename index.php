@@ -13,7 +13,7 @@ if (isset($_POST['login'])) {
   if ($password == $user['password']) {
     $_SESSION['name'] = $user['name'];
     $_SESSION['email'] = $user['email'];
-    $_SESSION['name'] = $user['name'];
+    $_SESSION['role'] = $user['role'];
     $_SESSION['login'] = true;
 
     header('Location: home.php');

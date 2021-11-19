@@ -1,6 +1,7 @@
 <?php 
 
 include('../connection.php');
+session_start();
 
 $query = "SELECT * FROM jadwal";
 $mapel = mysqli_query($connection, $query);
@@ -58,7 +59,9 @@ $i = 1;
       <div class="col-sm-8">
         <div class="d-grid mb-3">
           <p class="fs-5 text-center">Jadwal Ujian</p>
-          <a href="tambah.php" class="btn btn-primary btn-sm">Buat Jadwal Ujian Baru</a>
+          <?php if ($_SESSION['role'] == 'admin') : ?>
+            <a href="tambah.php" class="btn btn-primary btn-sm">Buat Jadwal Ujian Baru</a>
+          <?php endif ?>
         </div>
         <table class="table table-sm table-hover text-center">
           <thead>
@@ -68,7 +71,9 @@ $i = 1;
               <th>Hari, Tanggal</th>
               <th>Berlangsung</th>
               <th>Status</th>
-              <th>Action</th>
+              <?php if ($_SESSION['role'] == 'admin') : ?>
+                <th>Action</th>
+              <?php endif ?>
             </tr>
           </thead>
           <tbody>
@@ -79,12 +84,14 @@ $i = 1;
               <td><?= $m['waktu'] ?></td>
               <td><?= $m['berlangsung'] ? 'Ya' : 'Belum' ?></td>
               <td><?= $m['selesai'] ? 'Selesai' : 'Belum' ?></td>
-              <td>
-                <?php if (!$m['selesai']) : ?>
-                  <a href="ubah.php?id=<?= $m['id'] ?>" class="btn btn-warning btn-sm">Ubah</a>
-                <?php endif ?>
-                <a href="../hapus.php?id=<?= $m['id'] ?>" class="btn btn-danger btn-sm">Hapus</a>
-              </td>
+              <?php if ($_SESSION['role'] == 'admin') : ?>
+                <td>
+                  <?php if (!$m['selesai']) : ?>
+                    <a href="ubah.php?id=<?= $m['id'] ?>" class="btn btn-warning btn-sm">Ubah</a>
+                  <?php endif ?>
+                  <a href="../hapus.php?id=<?= $m['id'] ?>" class="btn btn-danger btn-sm">Hapus</a>
+                </td>
+              <?php endif ?>
             </tr>
             <?php endforeach ?>
           </tbody>

@@ -1,6 +1,7 @@
 <?php 
 
 include('../connection.php');
+session_start();
 
 $query = "SELECT * FROM jadwal WHERE berlangsung = 1";
 $mapel = mysqli_query($connection, $query);
@@ -77,7 +78,9 @@ if (isset($_POST['selesai'])) {
               <th>No</th>
               <th>Mata Pelajaran</th>
               <th>Hari, Tanggal</th>
-              <th>Action</th>
+              <?php if ($_SESSION['role'] == 'admin') : ?>
+                <th>Action</th>
+              <?php endif ?>
             </tr>
           </thead>
           <tbody>
@@ -86,12 +89,14 @@ if (isset($_POST['selesai'])) {
               <td><?= $i++ ?></td>
               <td><?= $m['mapel'] ?></td>
               <td><?= $m['waktu'] ?></td>
-              <td>
-                <form action="" method="POST">
-                  <input type="hidden" name="id" value="<?= $m['id'] ?>">
-                  <button class="btn btn-warning btn-sm" type="submit" name="selesai">Selesai</button>
-                </form>
-              </td>
+              <?php if ($_SESSION['role'] == 'admin') : ?>
+                <td>
+                  <form action="" method="POST">
+                    <input type="hidden" name="id" value="<?= $m['id'] ?>">
+                    <button class="btn btn-warning btn-sm" type="submit" name="selesai">Selesai</button>
+                  </form>
+                </td>
+              <?php endif ?>
             </tr>
             <?php endforeach ?>
           </tbody>
