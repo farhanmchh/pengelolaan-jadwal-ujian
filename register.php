@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include('connection.php');
 
@@ -13,7 +13,7 @@ if (isset($_POST['register'])) {
   $register = mysqli_query($connection, $query);
 
   if ($register) {
-    header('Location: login.php');
+    header('Location: index.php');
   }
 }
 
@@ -41,7 +41,7 @@ if (isset($_POST['register'])) {
           <div class="card-body">
             <form action="" method="POST">
               <p class="fs-4 text-center">Register</p>
-  
+
               <div class="mb-3">
                 <label for="" class="form-label">Name</label>
                 <input type="text" name="name" class="form-control form-control-sm text-center">
@@ -54,7 +54,7 @@ if (isset($_POST['register'])) {
                 <label for="" class="form-label">Password</label>
                 <input type="password" name="password" class="form-control form-control-sm text-center">
               </div>
-  
+
               <div class="d-grid mb-3">
                 <button class="btn btn-primary btn-sm" type="submit" name="register">Register</button>
               </div>

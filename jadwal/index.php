@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include('../connection.php');
 session_start();
@@ -7,6 +7,27 @@ $query = "SELECT * FROM jadwal";
 $mapel = mysqli_query($connection, $query);
 
 $i = 1;
+
+foreach ($mapel as $m) {
+  $waktu = $m['waktu'];
+  $year = intval(substr($waktu, 0, 4));
+  $month = intval(substr($waktu, 5, 2));
+  $day = intval(substr($waktu, 8, 2));
+
+  if ($year <= intval(date('Y'))) {
+    if ($month <= intval(date('m'))) {
+      if ($day <= intval(date('d'))) {
+        $id = $m['id'];
+
+        $query = "UPDATE jadwal SET
+                  berlangsung = 1
+                  WHERE id = $id";
+
+        $ubah = mysqli_query($connection, $query);
+      }
+    }
+  }
+}
 
 ?>
 
@@ -68,7 +89,7 @@ $i = 1;
             <tr>
               <th>No</th>
               <th>Mata Pelajaran</th>
-              <th>Hari, Tanggal</th>
+              <th>Tanggal</th>
               <th>Berlangsung</th>
               <th>Status</th>
               <?php if ($_SESSION['role'] == 'admin') : ?>
@@ -77,22 +98,22 @@ $i = 1;
             </tr>
           </thead>
           <tbody>
-            <?php foreach($mapel as $m) : ?>
-            <tr>
-              <td><?= $i++ ?></td>
-              <td><?= $m['mapel'] ?></td>
-              <td><?= $m['waktu'] ?></td>
-              <td><?= $m['berlangsung'] ? 'Ya' : 'Belum' ?></td>
-              <td><?= $m['selesai'] ? 'Selesai' : 'Belum' ?></td>
-              <?php if ($_SESSION['role'] == 'admin') : ?>
-                <td>
-                  <?php if (!$m['selesai']) : ?>
-                    <a href="ubah.php?id=<?= $m['id'] ?>" class="btn btn-warning btn-sm">Ubah</a>
-                  <?php endif ?>
-                  <a href="../hapus.php?id=<?= $m['id'] ?>" class="btn btn-danger btn-sm">Hapus</a>
-                </td>
-              <?php endif ?>
-            </tr>
+            <?php foreach ($mapel as $m) : ?>
+              <tr>
+                <td><?= $i++ ?></td>
+                <td><?= $m['mapel'] ?></td>
+                <td><?= $m['waktu'] ?></td>
+                <td><?= $m['berlangsung'] ? 'Ya' : 'Belum' ?></td>
+                <td><?= $m['selesai'] ? 'Selesai' : 'Belum' ?></td>
+                <?php if ($_SESSION['role'] == 'admin') : ?>
+                  <td>
+                    <?php if (!$m['selesai']) : ?>
+                      <a href="ubah.php?id=<?= $m['id'] ?>" class="btn btn-warning btn-sm">Ubah</a>
+                    <?php endif ?>
+                    <a href="hapus.php?id=<?= $m['id'] ?>" class="btn btn-danger btn-sm">Hapus</a>
+                  </td>
+                <?php endif ?>
+              </tr>
             <?php endforeach ?>
           </tbody>
         </table>

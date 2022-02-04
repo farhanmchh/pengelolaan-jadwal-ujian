@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include('../connection.php');
 session_start();
@@ -8,17 +8,24 @@ $mapel = mysqli_query($connection, $query);
 
 $i = 1;
 
-if (isset($_POST['selesai'])) {
-  $id = $_POST['id'];
-  $query = "UPDATE jadwal SET
-            berlangsung = 0,
-            selesai = 1
-            WHERE id = $id";
+foreach ($mapel as $m) {
+  $waktu = $m['waktu'];
+  $year = intval(substr($waktu, 0, 4));
+  $month = intval(substr($waktu, 5, 2));
+  $day = intval(substr($waktu, 8, 2));
 
-  $selesai = mysqli_query($connection, $query);
+  if ($year <= intval(date('Y'))) {
+    if ($month <= intval(date('m'))) {
+      if ($day <= intval(date('d'))) {
+        $id = $m['id'];
+        $query = "UPDATE jadwal SET
+                  berlangsung = 0,
+                  selesai = 1
+                  WHERE id = $id";
 
-  if ($selesai) {
-    header('Location: ../berlangsung/index.php');
+        $selesai = mysqli_query($connection, $query);
+      }
+    }
   }
 }
 
@@ -77,27 +84,16 @@ if (isset($_POST['selesai'])) {
             <tr>
               <th>No</th>
               <th>Mata Pelajaran</th>
-              <th>Hari, Tanggal</th>
-              <?php if ($_SESSION['role'] == 'admin') : ?>
-                <th>Action</th>
-              <?php endif ?>
+              <th>Tanggal</th>
             </tr>
           </thead>
           <tbody>
-            <?php foreach($mapel as $m) : ?>
-            <tr>
-              <td><?= $i++ ?></td>
-              <td><?= $m['mapel'] ?></td>
-              <td><?= $m['waktu'] ?></td>
-              <?php if ($_SESSION['role'] == 'admin') : ?>
-                <td>
-                  <form action="" method="POST">
-                    <input type="hidden" name="id" value="<?= $m['id'] ?>">
-                    <button class="btn btn-warning btn-sm" type="submit" name="selesai">Selesai</button>
-                  </form>
-                </td>
-              <?php endif ?>
-            </tr>
+            <?php foreach ($mapel as $m) : ?>
+              <tr>
+                <td><?= $i++ ?></td>
+                <td><?= $m['mapel'] ?></td>
+                <td><?= $m['waktu'] ?></td>
+              </tr>
             <?php endforeach ?>
           </tbody>
         </table>

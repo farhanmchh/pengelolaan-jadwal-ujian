@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include('../connection.php');
 
@@ -11,22 +11,6 @@ $mapel = mysqli_fetch_assoc($get_mapel);
 if (isset($_POST['mulai'])) {
   $query = "UPDATE jadwal SET
             berlangsung = 1
-            WHERE id = $id";
-  
-  $ubah = mysqli_query($connection, $query);
-
-  if ($ubah) {
-    header('Location: index.php');
-  }
-}
-
-if (isset($_POST['ubah'])) {
-  $mapel = $_POST['mapel'];
-  $waktu = $_POST['waktu'];
-
-  $query = "UPDATE jadwal SET
-            mapel = '$mapel',
-            waktu = '$waktu'
             WHERE id = $id";
 
   $ubah = mysqli_query($connection, $query);
@@ -91,12 +75,11 @@ if (isset($_POST['ubah'])) {
                 <input type="text" name="mapel" class="form-control form-control-sm text-center" value="<?= $mapel['mapel'] ?>">
               </div>
               <div class="mb-2">
-                <label for="" class="form-label">Hari, Tanggal</label>
-                <input type="text" name="waktu" class="form-control form-control-sm text-center" value="<?= $mapel['waktu'] ?>">
+                <label for="" class="form-label">Tanggal</label>
+                <input type="date" name="waktu" class="form-control form-control-sm text-center" value="<?= $mapel['waktu'] ?>">
               </div>
               <div class="d-grid gap-2">
                 <button class="btn btn-primary btn-sm" name="ubah" type="submit">Ubah</button>
-                <button class="btn btn-info btn-sm" name="mulai" type="submit">Mulai</button>
               </div>
             </form>
           </div>

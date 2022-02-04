@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include('../connection.php');
 
@@ -11,5 +11,3 @@ $hapus = mysqli_query($connection, $query);
 if ($hapus) {
   header('Location: ../jadwal/index.php');
 }
-
-?>

@@ -65,7 +65,7 @@ $i = 1;
             <tr>
               <th>No</th>
               <th>Mata Pelajaran</th>
-              <th>Hari, Tanggal</th>
+              <th>Tanggal</th>
               <th>Status</th>
               <?php if ($_SESSION['role'] == 'admin') : ?>
                 <th>Action</th>

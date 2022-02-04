@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include('../connection.php');
 
@@ -70,8 +70,8 @@ if (isset($_POST['submit'])) {
                 <input type="text" name="mapel" class="form-control form-control-sm text-center">
               </div>
               <div class="mb-2">
-                <label for="" class="form-label">Hari, Tanggal</label>
-                <input type="text" name="waktu" class="form-control form-control-sm text-center">
+                <label for="" class="form-label">Tanggal</label>
+                <input type="date" name="waktu" class="form-control form-control-sm text-center">
               </div>
               <div class="d-grid">
                 <button class="btn btn-primary btn-sm" name="submit" type="submit">Buat</button>
