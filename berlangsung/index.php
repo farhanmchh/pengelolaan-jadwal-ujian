@@ -1,6 +1,7 @@
 <?php
 
 include('../connection.php');
+
 session_start();
 
 $query = "SELECT * FROM jadwal WHERE berlangsung = 1";
@@ -9,21 +10,31 @@ $mapel = mysqli_query($connection, $query);
 $i = 1;
 
 foreach ($mapel as $m) {
-  $waktu = $m['waktu'];
-  $year = intval(substr($waktu, 0, 4));
-  $month = intval(substr($waktu, 5, 2));
-  $day = intval(substr($waktu, 8, 2));
+  $tanggal = $m['tanggal'];
+  $jam_selesai = $m['jam_selesai'];
 
-  if ($year <= intval(date('Y'))) {
-    if ($month <= intval(date('m'))) {
-      if ($day <= intval(date('d'))) {
-        $id = $m['id'];
-        $query = "UPDATE jadwal SET
-                  berlangsung = 0,
-                  selesai = 1
-                  WHERE id = $id";
+  $tahun = intval(substr($tanggal, 0, 4));
+  $bulan = intval(substr($tanggal, 5, 2));
+  $hari = intval(substr($tanggal, 8, 2));
 
-        $selesai = mysqli_query($connection, $query);
+  $jam = intval(substr($jam_selesai, 0, 2));
+  $menit = intval(substr($jam_selesai, 3, 2));
+
+  if ($tahun <= intval(date('Y'))) {
+    if ($bulan <= intval(date('m'))) {
+      if ($hari <= intval(date('d'))) {
+        if ($jam <= intval(date('H'))) {
+          if ($menit <= intval(date('i'))) {
+            $id = $m['id'];
+
+            $query = "UPDATE jadwal SET
+                      berlangsung = 0,
+                      selesai = 1
+                      WHERE id = $id";
+
+            $selesai = mysqli_query($connection, $query);
+          }
+        }
       }
     }
   }
@@ -85,6 +96,8 @@ foreach ($mapel as $m) {
               <th>No</th>
               <th>Mata Pelajaran</th>
               <th>Tanggal</th>
+              <th>Jam Mulai</th>
+              <th>Jam Selesai</th>
             </tr>
           </thead>
           <tbody>
@@ -92,7 +105,9 @@ foreach ($mapel as $m) {
               <tr>
                 <td><?= $i++ ?></td>
                 <td><?= $m['mapel'] ?></td>
-                <td><?= $m['waktu'] ?></td>
+                <td><?= $m['tanggal'] ?></td>
+                <td><?= $m['jam_mulai'] ?></td>
+                <td><?= $m['jam_selesai'] ?></td>
               </tr>
             <?php endforeach ?>
           </tbody>

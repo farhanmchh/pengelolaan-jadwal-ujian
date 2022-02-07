@@ -4,9 +4,24 @@ include('../connection.php');
 
 if (isset($_POST['submit'])) {
   $mapel = $_POST['mapel'];
-  $waktu = $_POST['waktu'];
+  $tanggal = $_POST['tanggal'];
+  $jam_mulai = $_POST['jam_mulai'];
+  $durasi = $_POST['durasi'];
 
-  $query = "INSERT INTO jadwal VALUES ('', '$mapel', '$waktu', '', '')";
+  $jam = intval(substr($_POST['jam_mulai'], 0, 2));
+  $menit = intval(substr($_POST['jam_mulai'], 3, 2)) + intval($durasi);
+
+  if ($menit > 120) {
+    $jam += 2;
+    $menit -= 120;
+  } else if ($menit > 60) {
+    $jam += 1;
+    $menit -= 60;
+  }
+
+  $jam_selesai = $jam . ':' . $menit;
+
+  $query = "INSERT INTO jadwal VALUES ('', '$mapel', '$tanggal', '$jam_mulai', '$jam_selesai', '$durasi', '', '')";
 
   $tambah = mysqli_query($connection, $query);
 
@@ -71,7 +86,23 @@ if (isset($_POST['submit'])) {
               </div>
               <div class="mb-2">
                 <label for="" class="form-label">Tanggal</label>
-                <input type="date" name="waktu" class="form-control form-control-sm text-center">
+                <input type="date" name="tanggal" class="form-control form-control-sm text-center">
+              </div>
+              <div class="mb-2">
+                <label for="" class="form-label">Jam Mulai</label>
+                <input type="time" name="jam_mulai" class="form-control form-control-sm text-center">
+              </div>
+              <div class="mb-2">
+                <label for="" class="form-label">Durasi (Menit)</label>
+                <select name="durasi" class="form-select form-select-sm text-center">
+                  <option></option>
+                  <option value="10">10</option>
+                  <option value="30">30</option>
+                  <option value="45">45</option>
+                  <option value="60">60</option>
+                  <option value="80">80</option>
+                  <option value="120">120</option>
+                </select>
               </div>
               <div class="d-grid">
                 <button class="btn btn-primary btn-sm" name="submit" type="submit">Buat</button>

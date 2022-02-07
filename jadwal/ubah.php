@@ -8,6 +8,40 @@ $query = "SELECT * FROM jadwal WHERE id = $id";
 $get_mapel = mysqli_query($connection, $query);
 $mapel = mysqli_fetch_assoc($get_mapel);
 
+if (isset($_POST['ubah'])) {
+  $mapel = $_POST['mapel'];
+  $tanggal = $_POST['tanggal'];
+  $jam_mulai  = $_POST['jam_mulai'];
+  $durasi = $_POST['durasi'];
+
+  $jam = intval(substr($jam_mulai, 0, 2));
+  $menit = intval(substr($jam_mulai, 3, 2)) + intval($durasi);
+
+  if ($menit > 120) {
+    $jam += 2;
+    $menit -= 120;
+  } else if ($menit > 60) {
+    $jam += 1;
+    $menit -= 60;
+  }
+
+  $jam_selesai = $jam . ':' . $menit;
+
+  $query = "UPDATE jadwal SET
+            mapel = '$mapel',
+            tanggal = '$tanggal',
+            jam_mulai = '$jam_mulai',
+            jam_selesai = '$jam_selesai',
+            durasi = '$durasi'
+            WHERE id = $id";
+
+  $ubah = mysqli_query($connection, $query);
+
+  if ($ubah) {
+    header('Location: index.php');
+  }
+}
+
 if (isset($_POST['mulai'])) {
   $query = "UPDATE jadwal SET
             berlangsung = 1
@@ -76,16 +110,32 @@ if (isset($_POST['mulai'])) {
               </div>
               <div class="mb-2">
                 <label for="" class="form-label">Tanggal</label>
-                <input type="date" name="waktu" class="form-control form-control-sm text-center" value="<?= $mapel['waktu'] ?>">
+                <input type="date" name="tanggal" class="form-control form-control-sm text-center" value="<?= $mapel['tanggal'] ?>">
               </div>
-              <div class="d-grid gap-2">
-                <button class="btn btn-primary btn-sm" name="ubah" type="submit">Ubah</button>
-              </div>
-            </form>
+              <label for="" class="form-label">Jam Mulai</label>
+              <input type="time" name="jam_mulai" class="form-control form-control-sm text-center" value="<?= $mapel['jam_mulai'] ?>">
           </div>
+          <div class="mb-2">
+            <label for="" class="form-label">Durasi (Menit)</label>
+            <select name="durasi" class="form-select form-select-sm text-center">
+              <option></option>
+              <option value="10" <?= $mapel['durasi'] == 10 ? 'selected' : '' ?>>10</option>
+              <option value="30" <?= $mapel['durasi'] == 30 ? 'selected' : '' ?>>30</option>
+              <option value="45" <?= $mapel['durasi'] == 45 ? 'selected' : '' ?>>45</option>
+              <option value="60" <?= $mapel['durasi'] == 60 ? 'selected' : '' ?>>60</option>
+              <option value="80" <?= $mapel['durasi'] == 80 ? 'selected' : '' ?>>80</option>
+              <option value="120" <?= $mapel['durasi'] == 120 ? 'selected' : '' ?>>120</option>
+            </select>
+          </div>
+          <div class="d-grid gap-2">
+            <button class="btn btn-primary btn-sm" name="ubah" type="submit">Ubah</button>
+            <!-- <button class="btn btn-info btn-sm" name="mulai" type="submit">Mulai</button> -->
+          </div>
+          </form>
         </div>
       </div>
     </div>
+  </div>
   </div>
   <!-- END CONTENT -->
 

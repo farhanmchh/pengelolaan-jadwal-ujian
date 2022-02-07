@@ -3,27 +3,36 @@
 include('../connection.php');
 session_start();
 
-$query = "SELECT * FROM jadwal";
+$query = "SELECT * FROM jadwal WHERE selesai = 0";
 $mapel = mysqli_query($connection, $query);
 
 $i = 1;
 
 foreach ($mapel as $m) {
-  $waktu = $m['waktu'];
-  $year = intval(substr($waktu, 0, 4));
-  $month = intval(substr($waktu, 5, 2));
-  $day = intval(substr($waktu, 8, 2));
+  $tanggal = $m['tanggal'];
+  $jam_mulai = $m['jam_mulai'];
 
-  if ($year <= intval(date('Y'))) {
-    if ($month <= intval(date('m'))) {
-      if ($day <= intval(date('d'))) {
-        $id = $m['id'];
+  $tahun  = intval(substr($tanggal, 0, 4));
+  $bulan = intval(substr($tanggal, 5, 2));
+  $hari   = intval(substr($tanggal, 8, 2));
 
-        $query = "UPDATE jadwal SET
-                  berlangsung = 1
-                  WHERE id = $id";
+  $jam = intval(substr($jam_mulai, 0, 2));
+  $menit = intval(substr($jam_mulai, 3, 2));
 
-        $ubah = mysqli_query($connection, $query);
+  if ($tahun <= intval(date('Y'))) {
+    if ($bulan <= intval(date('m'))) {
+      if ($hari <= intval(date('d'))) {
+        if ($jam <= intval(date('H')) || $menit <= intval(date('i'))) {
+          if (!$m['selesai']) {
+            $id = $m['id'];
+
+            $query = "UPDATE jadwal SET
+                      berlangsung = 1
+                      WHERE id = $id";
+
+            $ubah = mysqli_query($connection, $query);
+          }
+        }
       }
     }
   }
@@ -77,7 +86,7 @@ foreach ($mapel as $m) {
   <!-- CONTENT -->
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-sm-8">
+      <div class="col-sm">
         <div class="d-grid mb-3">
           <p class="fs-5 text-center">Jadwal Ujian</p>
           <?php if ($_SESSION['role'] == 'admin') : ?>
@@ -90,6 +99,9 @@ foreach ($mapel as $m) {
               <th>No</th>
               <th>Mata Pelajaran</th>
               <th>Tanggal</th>
+              <th>Jam Mulai</th>
+              <th>Jam Selesai</th>
+              <th>Durasi</th>
               <th>Berlangsung</th>
               <th>Status</th>
               <?php if ($_SESSION['role'] == 'admin') : ?>
@@ -102,9 +114,12 @@ foreach ($mapel as $m) {
               <tr>
                 <td><?= $i++ ?></td>
                 <td><?= $m['mapel'] ?></td>
-                <td><?= $m['waktu'] ?></td>
-                <td><?= $m['berlangsung'] ? 'Ya' : 'Belum' ?></td>
-                <td><?= $m['selesai'] ? 'Selesai' : 'Belum' ?></td>
+                <td><?= $m['tanggal'] ?></td>
+                <td><?= $m['jam_mulai'] ?></td>
+                <td><?= $m['jam_selesai'] ?></td>
+                <td><?= $m['durasi'] ?> Menit</td>
+                <td><?= $m['berlangsung'] ? 'Ya' : 'Tidak' ?></td>
+                <td><?= $m['selesai'] ? 'Selesai' : 'Belum Selesai' ?></td>
                 <?php if ($_SESSION['role'] == 'admin') : ?>
                   <td>
                     <?php if (!$m['selesai']) : ?>

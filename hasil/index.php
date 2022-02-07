@@ -56,7 +56,7 @@ $i = 1;
   <!-- CONTENT -->
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-sm-8">
+      <div class="col-sm-10">
         <div class="d-grid mb-3">
           <p class="fs-5 text-center">Hasil Ujian</p>
         </div>
@@ -66,6 +66,9 @@ $i = 1;
               <th>No</th>
               <th>Mata Pelajaran</th>
               <th>Tanggal</th>
+              <th>Jam Mulai</th>
+              <th>Jam Selesai</th>
+              <th>Durasi</th>
               <th>Status</th>
               <?php if ($_SESSION['role'] == 'admin') : ?>
                 <th>Action</th>
@@ -77,7 +80,10 @@ $i = 1;
               <tr>
                 <td><?= $i++ ?></td>
                 <td><?= $m['mapel'] ?></td>
-                <td><?= $m['waktu'] ?></td>
+                <td><?= $m['tanggal'] ?></td>
+                <td><?= $m['jam_mulai'] ?></td>
+                <td><?= $m['jam_selesai'] ?></td>
+                <td><?= $m['durasi'] ?> Menit</td>
                 <td><?= $m['selesai'] ? 'Selesai' : 'Belum' ?></td>
                 <?php if ($_SESSION['role'] == 'admin') : ?>
                   <td>
